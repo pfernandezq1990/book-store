@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { getConnection } from 'typeorm';
 import { MapperService } from '../../share/mapper.service';
-import { Role } from '../role/role.entity';
+import { Role } from '../role/entities/role.entity';
 import { UserDto } from './dto/user.dto';
 import { User, UserDetails } from './entities';
 import { UserRepository } from './user.repository';
