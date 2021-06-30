@@ -8,9 +8,10 @@ import { DatabaseModule } from './database/database.module';
 import { RoleModule } from './modules/role/role.module';
 import { UserModule } from './modules/user/user.module';
 import { ShareModule } from './share/share.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
-  imports: [ConfigModule, DatabaseModule, UserModule, ShareModule, RoleModule],
+  imports: [ConfigModule, DatabaseModule, UserModule, ShareModule, RoleModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
