@@ -5,6 +5,7 @@ import { UserController } from './user.controller';
 import { ShareModule } from '../../share/share.module';
 import { UserRepository } from './user.repository';
 import { AuthModule } from '../auth/auth.module';
+import { RoleRepository } from '../role/role.repository';
 
 @Module({
   imports: [
