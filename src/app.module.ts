@@ -4,9 +4,13 @@ import { AppService } from './app.service';
 import { Configuration } from './config/config.keys';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
+import { DatabaseModule } from './database/database.module';
+import { RoleModule } from './modules/role/role.module';
+import { UserModule } from './modules/user/user.module';
+import { ShareModule } from './share/share.module';
 
 @Module({
-  imports: [ConfigModule],
+  imports: [ConfigModule, DatabaseModule, UserModule, ShareModule, RoleModule],
   controllers: [AppController],
   providers: [AppService],
 })
