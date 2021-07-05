@@ -9,7 +9,7 @@ import { RoleRepository } from '../role/role.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserRepository]),
+    TypeOrmModule.forFeature([UserRepository, RoleRepository]),
     ShareModule,
     AuthModule,
   ],
