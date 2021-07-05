@@ -4,13 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getConnection } from 'typeorm';
-import { Role } from '../role/entities/role.entity';
 import { RoleRepository } from '../role/role.repository';
-import { UserDto } from './dto/user.dto';
-import { User, UserDetails } from './entities';
+import { User } from './entities';
 import { UserRepository } from './user.repository';
 import { Status } from '../../share/entity-status.enum';
+import { ReadUserDto, UpdateUserDto } from './dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -22,12 +21,12 @@ export class UserService {
   ) {}
 
   // Obtener un usuario
-  async get(id: number): Promise<User> {
-    if (!id) {
+  async get(userId: number): Promise<ReadUserDto> {
+    if (!userId) {
       throw new BadRequestException('id must be sent');
     }
 
-    const user: User = await this._userRepository.findOne(id, {
+    const user: User = await this._userRepository.findOne(userId, {
       where: { status: Status.ACTIVE },
     });
 
@@ -35,38 +34,37 @@ export class UserService {
       throw new NotFoundException();
     }
 
-    return user;
+    return plainToClass(ReadUserDto, user);
   }
 
   // Obtener todos los usuarios
-  async getAll(): Promise<User[]> {
+  async getAll(): Promise<ReadUserDto[]> {
     const users: User[] = await this._userRepository.find({
       where: { status: Status.ACTIVE },
     });
 
-    return users;
-  }
-
-  // Crear un usuario
-  async create(user: User): Promise<User> {
-    const details = new UserDetails();
-    user.details = details;
-
-    const repo = await getConnection().getRepository(Role);
-    const defaultRole = await repo.findOne({ where: { name: 'GENERAL' } });
-    user.roles = [defaultRole];
-
-    const savedUser: User = await this._userRepository.save(user);
-    return savedUser;
+    return users.map((user: User) => plainToClass(ReadUserDto, user));
   }
 
   // Update un usuario
-  async update(id: number, user: User): Promise<void> {
-    await this._userRepository.update(id, user);
+  async update(userId: number, user: UpdateUserDto): Promise<ReadUserDto> {
+    const foundUser = await this._userRepository.findOne(userId, {
+      where: { status: Status.ACTIVE },
+    });
+
+    if (!foundUser) {
+      throw new NotFoundException('This user does not exist');
+    }
+
+    foundUser.username = user.username;
+    const updateUser = await this._userRepository.save(foundUser);
+
+    return plainToClass(ReadUserDto, updateUser);
   }
 
-  async delete(id: number): Promise<void> {
-    const userExist = await this._userRepository.findOne(id, {
+  // Delete user
+  async delete(userId: number): Promise<void> {
+    const userExist = await this._userRepository.findOne(userId, {
       where: { status: Status.ACTIVE },
     });
 
@@ -74,11 +72,11 @@ export class UserService {
       throw new NotFoundException();
     }
 
-    await this._userRepository.update(id, { status: 'INACTIVE' });
+    await this._userRepository.update(userId, { status: 'INACTIVE' });
   }
 
   //  Asignar un role a un usuario
-  async setRoleToUser(userId: number, roleId: number) {
+  async setRoleToUser(userId: number, roleId: number): Promise<boolean> {
     const userExist = await this._userRepository.findOne(userId, {
       where: { status: Status.ACTIVE },
     });
