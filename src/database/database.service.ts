@@ -14,7 +14,7 @@ export const databaseProviders = [
         host: config.get(Configuration.DB_HOST),
         username: config.get(Configuration.DB_USERNAME),
         database: config.get(Configuration.DB_NAME),
-        port: 5444,
+        port: 5432,
         password: config.get(Configuration.DB_PASSWORD),
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         migrations: [__dirname + '/migrations/*{.ts,.js}'],

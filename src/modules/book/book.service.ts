@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
-import { Status } from 'src/share/entity-status.enum';
+import { Status } from '../../share/entity-status.enum';
 import { In } from 'typeorm';
 import { Role } from '../role/entities';
 import { RoleType } from '../role/role.type.enum';
