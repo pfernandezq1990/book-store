@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LogguedInDto, SinginDto, SingupDto } from './dto';
+import { SignupDto } from './dto/signup.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,7 +16,7 @@ export class AuthController {
   //  Metodo para registrar un usuario
   @Post('/singup')
   @UsePipes(ValidationPipe)
-  singup(@Body() singupDto: SingupDto): Promise<void> {
+  singup(@Body() singupDto: SingupDto): Promise<SignupDto> {
     return this._authService.singup(singupDto);
   }
 

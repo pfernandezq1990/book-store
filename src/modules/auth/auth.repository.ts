@@ -9,7 +9,7 @@ import { SingupDto } from './dto';
 @EntityRepository(User)
 export class AuthRepository extends Repository<User> {
   async signup(singupDto: SingupDto) {
-    const { username, email, password } = singupDto;
+    const { username, email, password, name, lastname, dateOfBirth } = singupDto;
     const user = new User();
     user.username = username;
     user.email = email;
@@ -22,8 +22,11 @@ export class AuthRepository extends Repository<User> {
       where: { name: RoleType.GENERAL },
     });
     user.roles = [defaultRole];
-
+    
     const details = new UserDetails();
+    details.name = name;
+    details.lastname = lastname;
+    details.dateOfBirth = dateOfBirth;
     user.details = details;
 
     const salt = await genSalt(10);

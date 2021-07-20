@@ -2,7 +2,7 @@
     "type": "postgres",
     "username": "postgres",
     "password": "mysecretpassword",
-    "host": "postgres",
+    "localhost": "postgres",
     "port": "5432",
     "database": "bookstore",
     "entities": ["src/**/**/*.entity{.ts,.js}"],

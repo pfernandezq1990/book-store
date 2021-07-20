@@ -9,9 +9,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcryptjs';
 import { plainToClass } from 'class-transformer';
 import { RoleType } from '../role/role.type.enum';
+import { ReadUserDto } from '../user/dto';
 import { User } from '../user/entities/user.entity';
 import { AuthRepository } from './auth.repository';
 import { LogguedInDto, SinginDto, SingupDto } from './dto';
+import { SignupDto } from './dto/signup.dto';
 import { IJwtPayload } from './interfaces';
 
 @Injectable()
@@ -22,7 +24,7 @@ export class AuthService {
     private readonly _jwtService: JwtService,
   ) {}
 
-  async singup(singupDto: SingupDto): Promise<void> {
+  async singup(singupDto: SingupDto): Promise<SignupDto> {
     const { username, email } = singupDto;
     const userExists = await this._authRepository.findOne({
       where: [{ username }, { email }],
@@ -32,9 +34,17 @@ export class AuthService {
       throw new ConflictException('username or email already exist');
     }
 
-    return this._authRepository.signup(singupDto);
+    await this._authRepository.signup(singupDto);
+
+    const message = 'Signup Succefull'
+    const user = await this._authRepository.findOne({
+      where: [{username} , {email}]
+    })  
+
+    return plainToClass(SignupDto, {message, user});
   }
 
+  // Login
   async singin(singinDto: SinginDto): Promise<LogguedInDto> {
     const { username, password } = singinDto;
     const user: User = await this._authRepository.findOne({
