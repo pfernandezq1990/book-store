@@ -11,4 +11,12 @@ export class LogguedInDto {
   @Expose()
   @Type(() => ReadUserDto)
   user: ReadUserDto;
+
+  @Expose()
+  @IsString()
+  message: string;
+
+  @Expose()
+  @IsString()
+  status: string;
 }

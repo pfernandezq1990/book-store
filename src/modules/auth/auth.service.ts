@@ -43,6 +43,7 @@ export class AuthService {
 
     if (!user) {
       throw new NotFoundException('user does not exist');
+      
     }
 
     const isMatch = await compare(password, user.password);
@@ -59,6 +60,11 @@ export class AuthService {
     };
 
     const token = this._jwtService.sign(payload);
-    return plainToClass(LogguedInDto, { token, user });
+
+    const message = 'Login Successful';
+
+    const status = 'SUCCESS';
+
+    return plainToClass(LogguedInDto, { token, user, message, status });
   }
 }
