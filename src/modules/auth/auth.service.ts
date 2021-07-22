@@ -37,11 +37,12 @@ export class AuthService {
     await this._authRepository.signup(singupDto);
 
     const message = 'Signup Succefull'
+    const status = 'SUCCESS';
     const user = await this._authRepository.findOne({
       where: [{username} , {email}]
     })  
 
-    return plainToClass(SignupDto, {message, user});
+    return plainToClass(SignupDto, {message, user, status});
   }
 
   // Login

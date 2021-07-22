@@ -9,4 +9,8 @@ export class SignupDto {
     @IsNotEmpty()
     @IsString()
     message: string;
+
+    @IsNotEmpty()
+    @IsString()
+    status: string;
 }
